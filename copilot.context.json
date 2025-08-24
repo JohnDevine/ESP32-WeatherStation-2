@@ -1,0 +1,243 @@
+{
+  "version": 1,
+  "projectSettings": {
+    "projectType": "ESP32",
+    "framework": "ESP-IDF",
+    "buildSystem": "PlatformIO",
+    "versionControl": "Git",
+    "authorInfo": {
+      "name": "John Devine",
+      "email": "john.h.devine@gmail.com"
+    }
+  },
+  "developmentEnvironment": {
+    "hardware": {
+      "primary": "Mac mini M2 with 16GB memory and 512GB SSD",
+      "mobile": "iPad M2 13 inch with Apple Pencil"
+    },
+    "software": {
+      "editor": "Visual Studio Code",
+      "extensionsFile": "MyProgrammingSetup/MyExtensions.txt"
+    }
+  },
+  "codingGuidelines": {
+    "fileStructure": {
+      "mainFile": {
+        "type": "main.c",
+        "entryPoint": "void app_main(void)",
+        "warning": "Use ESP-IDF C style conventions for all code."
+      },
+      "organization": {
+        "prototypes": "Declare function prototypes at the top of each file",
+        "includes": "Place includes after prototypes",
+        "constants": "Define constants and definitions after includes",
+        "functions": "Implement functions after constants",
+        "entryPoint": "Place app_main at the bottom of the file"
+      }
+    },
+    "style": {
+      "indentation": "4 spaces, no tabs",
+      "naming": {
+        "functions": "snake_case",
+        "constants": "UPPER_CASE",
+        "structs": "PascalCase",
+        "enums": "PascalCase"
+      },
+      "functionLength": "Prefer functions under 50 lines",
+      "comments": "Use Doxygen-style for all functions"
+    },
+    "bestPractices": {
+      "logging": "Use ESP_LOGI, ESP_LOGW, ESP_LOGE instead of printf",
+      "errorHandling": "Use ESP_ERROR_CHECK() for all ESP-IDF API calls",
+      "memoryManagement": "Prefer static allocation over dynamic (malloc)",
+      "concurrency": "Use FreeRTOS primitives, keep ISRs minimal",
+      "testing": "Write unit tests using Unity framework"
+    }
+  },
+  "directoryStructure": {
+    "include": "Header files (.h) with public APIs only",
+    "src": "Source files (.c) with implementation details",
+    "components": "Optional reusable libraries",
+    "test": "Unity test files",
+    "platformio.ini": "Build configuration"
+  },
+  "codeOrganization": {
+    "logicalSeparation": {
+      "mainFile": "Should only contain entry-point logic (app_main())",
+      "functionality": "Move functionality into separate .c/.h files under src/ or components/",
+      "sensors": "Give devices like sensors their own class"
+    }
+  },
+  "examples": {
+    "codeStructure": [
+      "// =============================",
+      "// Function Prototypes",
+      "// =============================",
+      "static void init_gpio(void);",
+      "static void wifi_connect(void);",
+      "",
+      "// =============================",
+      "// Includes",
+      "// =============================",
+      "#include <stdio.h>",
+      "#include \"driver/gpio.h\"",
+      "#include \"esp_wifi.h\"",
+      "",
+      "// =============================",
+      "// Constants & Definitions",
+      "// =============================",
+      "static const char *TAG = \"MODULE_NAME\";",
+      "#define LED_GPIO GPIO_NUM_2",
+      "",
+      "// =============================",
+      "// Function Definitions",
+      "// =============================",
+      "static void init_gpio(void) {",
+      "    // Function implementation",
+      "}"
+    ],
+    "functionDocumentation": [
+      "/**",
+      " * @brief Brief description of function",
+      " *",
+      " * @param param1 Description of first parameter",
+      " * @param param2 Description of second parameter",
+      " * @return Description of return value",
+      " */",
+      "void example_function(int param1, bool param2);"
+    ],
+    "loggingUsage": [
+      "static const char *TAG = \"WIFI\";",
+      "",
+      "ESP_LOGI(TAG, \"Connecting to WiFi...\");",
+      "ESP_LOGW(TAG, \"Connection timeout, retrying...\");",
+      "ESP_LOGE(TAG, \"Failed to connect, error=%d\", err);"
+    ],
+    "errorHandling": [
+      "esp_err_t ret = nvs_flash_init();",
+      "if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {",
+      "    ESP_ERROR_CHECK(nvs_flash_erase());",
+      "    ret = nvs_flash_init();",
+      "}",
+      "ESP_ERROR_CHECK(ret);"
+    ],
+    "platformioIni": [
+      "[env:esp32-devkit]",
+      "platform = espressif32",
+      "board = esp32dev",
+      "framework = espidf",
+      "monitor_speed = 115200",
+      "monitor_filters = esp32_exception_decoder",
+      "build_flags = ",
+      "    -Wall",
+      "    -Wextra",
+      "    -Werror",
+      "    -DDEBUG"
+    ]
+  },
+  "mainFileTemplate": {
+    "filename": "main.c",
+    "structure": [
+      "/**",
+      " * @file main.c",
+      " * @brief Main application entry point",
+      " * @version 0.1",
+      " * @date 2025-08-22",
+      " */",
+      "",
+      "// =============================",
+      "// Function Prototypes",
+      "// =============================",
+      "static void init_hardware(void);",
+      "static void app_task(void *pvParameter);",
+      "",
+      "// =============================",
+      "// Includes",
+      "// =============================",
+      "#include <stdio.h>",
+      "#include \"freertos/FreeRTOS.h\"",
+      "#include \"freertos/task.h\"",
+      "#include \"esp_system.h\"",
+      "#include \"esp_log.h\"",
+      "#include \"nvs_flash.h\"",
+      "",
+      "// =============================",
+      "// Constants & Definitions",
+      "// =============================",
+      "static const char *TAG = \"MAIN\";",
+      "",
+      "// =============================",
+      "// Function Definitions",
+      "// =============================",
+      "",
+      "/**",
+      " * @brief Initialize hardware components",
+      " */",
+      "static void init_hardware(void) {",
+      "    // Initialize NVS",
+      "    esp_err_t ret = nvs_flash_init();",
+      "    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {",
+      "        ESP_ERROR_CHECK(nvs_flash_erase());",
+      "        ret = nvs_flash_init();",
+      "    }",
+      "    ESP_ERROR_CHECK(ret);",
+      "    ESP_LOGI(TAG, \"NVS initialized successfully\");",
+      "}",
+      "",
+      "/**",
+      " * @brief Main application task",
+      " * @param pvParameter Task parameters (unused)",
+      " */",
+      "static void app_task(void *pvParameter) {",
+      "    while (1) {",
+      "        ESP_LOGI(TAG, \"Hello from app_task\");",
+      "        vTaskDelay(pdMS_TO_TICKS(1000));",
+      "    }",
+      "}",
+      "",
+      "// =============================",
+      "// ESP-IDF Entry Point",
+      "// =============================",
+      "",
+      "/**",
+      " * @brief Application entry point",
+      " */",
+      "void app_main(void) {",
+      "    ESP_LOGI(TAG, \"Application starting...\");",
+      "    ",
+      "    // Initialize hardware components",
+      "    init_hardware();",
+      "    ",
+      "    // Create main application task",
+      "    xTaskCreate(app_task, \"app_task\", 4096, NULL, 5, NULL);",
+      "    ",
+      "    ESP_LOGI(TAG, \"Initialization complete\");",
+      "}"
+    ]
+  },
+  "qualityChecklist": [
+    "Headers at top of .c file",
+    "Small, well-commented functions",
+    "Use ESP_LOGx instead of printf",
+    "Check all API calls with ESP_ERROR_CHECK",
+    "Use static memory allocation where possible",
+    "Write unit tests for critical logic",
+    "Enforce clean builds with -Wall -Wextra -Werror"
+  ],
+  "vsCodeSetup": {
+    "recommendedExtensions": [
+      "platformio.platformio-ide",
+      "ms-vscode.cpptools",
+      "ms-vscode.cpptools-extension-pack",
+      "ms-vscode.cmake-tools",
+      "ms-vscode.makefile-tools",
+      "betwo.vscode-doxygen-runner",
+      "github.copilot",
+      "github.copilot-chat",
+      "eamodio.gitlens",
+      "chrisdias.promptboost",
+      "ms-azuretools.vscode-docker"
+    ],
+    "themeExtension": "sdras.night-owl"
+  }
+}
