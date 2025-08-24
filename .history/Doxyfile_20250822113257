@@ -2,8 +2,8 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 
-PROJECT_NAME           = "ESP32 Weather Station Project"
-PROJECT_BRIEF          = "Create a program to monitor weather conditions"
+PROJECT_NAME           = "ESP32 Relay Project"
+PROJECT_BRIEF          = "Create a program to control a relay via WiFi"
 OUTPUT_DIRECTORY       = Documents
 
 #--------------------------------------------------------------------------- 
